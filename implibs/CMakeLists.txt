@@ -1,0 +1,12 @@
+function(add_win32_implib TARGET DEF)
+    add_library(${TARGET}-dll SHARED ${TARGET}.c ${TARGET}.def)
+    set_property(TARGET ${TARGET}-dll PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    set_property(TARGET ${TARGET}-dll PROPERTY PREFIX "")
+    set_property(TARGET ${TARGET}-dll PROPERTY OUTPUT_NAME "${TARGET}")
+    add_library(${TARGET} INTERFACE)
+    target_link_libraries(${TARGET} INTERFACE "$<TARGET_IMPORT_FILE:${TARGET}-dll>")
+    target_include_directories(${TARGET} SYSTEM INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+endfunction()
+
+add_win32_implib(d3drm "${CMAKE_CURRENT_SOURCE_DIR}/d3drm.def")
+add_win32_implib(d3dxof "${CMAKE_CURRENT_SOURCE_DIR}/d3dxof.def")
