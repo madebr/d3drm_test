@@ -1,0 +1,8 @@
+add_subdirectory(src/bellhop)
+add_subdirectory(src/chatconnect)
+add_subdirectory(src/dplaunch)
+add_subdirectory(src/dpslots)
+add_subdirectory(src/duel)
+add_subdirectory(src/override)
+add_subdirectory(src/simpleconnect)
+add_subdirectory(src/stagedconnect)

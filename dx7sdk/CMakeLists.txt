@@ -1,0 +1,12 @@
+enable_language(CXX)
+add_compile_definitions(-DDIRECTINPUT_VERSION=0x700)
+
+add_subdirectory(d3dim)
+add_subdirectory(d3drm)
+add_subdirectory(d3dx)
+add_subdirectory(ddraw)
+add_subdirectory(dinput)
+add_subdirectory(dmusic)
+add_subdirectory(dplay)
+add_subdirectory(dsound)
+add_subdirectory(dxmisc)

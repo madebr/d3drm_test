@@ -1,0 +1,8 @@
+add_subdirectory(src/adjustsound)
+add_subdirectory(src/capturesound)
+add_subdirectory(src/enumdevices)
+add_subdirectory(src/fullduplexfilter)
+add_subdirectory(src/play3dsound)
+add_subdirectory(src/playsound)
+add_subdirectory(src/playstreaming)
+add_subdirectory(src/voicemanagement)
