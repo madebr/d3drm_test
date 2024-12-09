@@ -19,13 +19,13 @@
 #include <windowsx.h>
 
 #ifdef   _DEBUG
-#include <mmsystem.h>  
+#include <mmsystem.h>
 #include <stdarg.h>
 
 #include "global.h"
 #include "debug.h"
 
-PRIVATE VOID FAR CDECL DbgVPrintF(LPSTR szFmt, LPSTR va);
+PRIVATE VOID FAR CDECL DbgVPrintF(LPCSTR szFmt, LPSTR va);
 
 /*
 **  Since we don't UNICODE our debugging messages, use the ASCII entry
@@ -33,13 +33,12 @@ PRIVATE VOID FAR CDECL DbgVPrintF(LPSTR szFmt, LPSTR va);
 */
 #define wvsprintfA          wvsprintf
 #define GetProfileIntA      GetProfileInt
-#define OutputDebugStringA  OutputDebugStr
 
 #define lstrcatA            lstrcat
 #define lstrlenA            lstrlen
 
 BOOL                        __gfDbgEnabled  = TRUE;
-UINT                        __guDbgLevel    = 0;   
+UINT                        __guDbgLevel    = 0;
 
 WORD                        wDebugLevel     = 0;
 
@@ -90,7 +89,7 @@ VOID WINAPI WinAssert(
 *
 *****************************************************************************/
 VOID FAR CDECL DbgVPrintF(
-    LPSTR                   szFmt, 
+    LPCSTR                  szFmt,
     LPSTR                   va)
 {
     char                    ach[DEBUG_MAX_LINE_LEN];
@@ -160,8 +159,8 @@ VOID FAR CDECL DbgVPrintF(
 *
 *****************************************************************************/
 void FAR CDECL dprintf(
-    UINT                    uDbgLevel, 
-    LPSTR                   szFmt, 
+    UINT                    uDbgLevel,
+    LPSTR                   szFmt,
     ...)
 {
     va_list                 va;
@@ -244,7 +243,7 @@ UINT WINAPI DbgInitialize(BOOL fEnable)
     DbgEnable(fEnable);
 
     return (__guDbgLevel);
-} 
+}
 
 
 #endif

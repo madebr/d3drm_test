@@ -5,4 +5,4 @@ add_executable(sprite WIN32
     sprite.rc
     directx.ico
 )
-target_link_libraries(sprite PRIVATE d3dx ddraw)
+target_link_libraries(sprite PRIVATE d3dx ddraw winmm)

@@ -1,4 +1,4 @@
-add_executable(faces
+add_executable(faces WIN32
     faces.cpp
     rmmain.cpp
     resource.h
