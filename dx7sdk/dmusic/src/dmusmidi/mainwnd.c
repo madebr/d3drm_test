@@ -1158,10 +1158,10 @@ VOID ToggleReverb(HWND hWnd)
             dwEffects = DMUS_EFFECT_REVERB;
         }
 
-#if defined(_MSC_EXTENSIONS) || defined(__MINGW32__)
-        ksp.Data.Set   = GUID_DMUS_PROP_Effects;
-        ksp.Data.Id    = 0;
-        ksp.Data.Flags = KSPROPERTY_TYPE_SET;
+#if defined(_MSC_EXTENSIONS)
+        ksp.Set   = GUID_DMUS_PROP_Effects;
+        ksp.Id    = 0;
+        ksp.Flags = KSPROPERTY_TYPE_SET;
 #else
         ksp.Data.Set   = GUID_DMUS_PROP_Effects;
         ksp.Data.Id    = 0;

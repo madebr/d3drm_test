@@ -13,4 +13,4 @@ add_executable(particle WIN32
     particle.rc
     directx.ico
 )
-target_link_libraries(particle PRIVATE d3dx)
+target_link_libraries(particle PRIVATE d3dx ddraw winmm)

@@ -11,7 +11,7 @@
 #define NAME_OF_THE_APP "D3DX - Gravity"
 
 #define RELEASENULL(pObject) if (pObject) {pObject->Release(); pObject = NULL;}
-    
+
 #define NUM_PLANETS         300
 #define NUM_PARTICLES       1500
 #define NUM_MATERIALS       25
@@ -61,8 +61,8 @@ public:
     void                    DestroySpheres();
     HRESULT                 GenerateSpheres();
     HRESULT                 Draw();
-    void                    ApplyGravity(   float* pfDistance, 
-                                            D3DXVECTOR4* pPos, 
+    void                    ApplyGravity(   float* pfDistance,
+                                            D3DXVECTOR4* pPos,
                                             BOOL* pbAttract);
 
     BOOL                    m_bD3DXReady;
@@ -103,7 +103,7 @@ public:
 CGravity* g_pGravity;
 
 CGravity::CGravity()
-{  
+{
     m_bD3DXReady        = FALSE;
     m_bIsFullscreen     = FALSE;
     m_pD3DDev           = NULL;
@@ -156,11 +156,11 @@ float Random(float fMax)
 }
 
 void CGravity::UpdateTime()
-{ 
+{
     LARGE_INTEGER liCurrTime;
     if(!QueryPerformanceCounter(&liCurrTime))
         liCurrTime.QuadPart = m_liLastTime.QuadPart + 1;
-    
+
     m_dElapsedTime = (double)(liCurrTime.QuadPart - m_liLastTime.QuadPart)*
                                 m_dPeriod;
 
@@ -305,9 +305,9 @@ HRESULT CGravity::InitRenderer()
     m_SunMaterial.specular.b = 1.0f;
     m_SunMaterial.power = 3.0f;
 
-    for( i = 0; i < NUM_MATERIALS; i++ ) 
+    for( i = 0; i < NUM_MATERIALS; i++ )
     {
-        memcpy(&m_PlanetMaterials[i],&m_SunMaterial,sizeof(D3DMATERIAL7));        
+        memcpy(&m_PlanetMaterials[i],&m_SunMaterial,sizeof(D3DMATERIAL7));
         m_PlanetMaterials[i].diffuse.r = Random(1.0f);
         m_PlanetMaterials[i].diffuse.g = Random(1.0f);
         m_PlanetMaterials[i].diffuse.b = Random(1.0f);
@@ -316,7 +316,7 @@ HRESULT CGravity::InitRenderer()
 
     if( FAILED( hr = GenerateSpheres() ) )
         return hr;
-    
+
     float fPlanetRad;
     for( i = 0; i < NUM_PARTICLES; i++ )
     {
@@ -351,9 +351,10 @@ HRESULT CGravity::InitRenderer()
 HRESULT CGravity::GenerateSpheres()
 {
     HRESULT hr;
-    
+    int i;
+
     float fPlanetRad;
-    for( int i = 0; i < NUM_SPHERES; i++ ) 
+    for( i = 0; i < NUM_SPHERES; i++ )
     {
         fPlanetRad = (float)Random(3.2f) + 0.7f;
         hr = D3DXCreateSphere(  m_pD3DDev,
@@ -426,7 +427,7 @@ void CGravity::ApplyGravity(float* pfDistance, D3DXVECTOR4* pPos, BOOL* pbAttrac
         {
             // Get sucked towards the sun:
             *pfDistance *= (float)pow(0.999,m_dElapsedTime*10);
-            
+
             if( *pfDistance < 50 )
             {
                 *pfDistance -= (float)(m_dElapsedTime*15);
@@ -440,9 +441,9 @@ void CGravity::ApplyGravity(float* pfDistance, D3DXVECTOR4* pPos, BOOL* pbAttrac
                 *pfDistance -= (float)(m_dElapsedTime*5);
             }
             *pfDistance = max(0.1f,*pfDistance);
-            
+
             D3DXMATRIX rot;
-            D3DXMatrixRotationAxis(&rot, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ), 
+            D3DXMatrixRotationAxis(&rot, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ),
                                     (float)(80.0f*pow(*pfDistance,-1.1f)*m_dElapsedTime));
             D3DXVec4Transform( pPos, pPos, &rot );
             (*pPos).y *= (float)pow(0.999,m_dElapsedTime*30);
@@ -504,64 +505,64 @@ HRESULT CGravity::Draw()
         hr = m_pD3DX->Clear(D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER);
         if ( FAILED(hr) )
             return hr;
-        
+
         UpdateTime();
-        
+
         float fViewDist = 400+300*(float)sin(m_dAbsoluteTime*0.2);
-        
+
         m_LightOnSun.dvPosition.dvX = 0.0f;
         m_LightOnSun.dvPosition.dvY = 0.0f;
         m_LightOnSun.dvPosition.dvZ = -100.f + fViewDist;
         m_pD3DDev->SetLight( 0, &m_LightOnSun );
-        
+
         // Set up state for drawing the sun.
-        
+
         m_fSunRot[0] = (float)(m_dAbsoluteTime/2);
         m_fSunRot[1] = (float)(m_dAbsoluteTime/2);
         m_fSunRot[2] = (float)(m_dAbsoluteTime);
-        
+
         m_pD3DDev->SetMaterial(&m_SunMaterial);
 
         D3DXMATRIX matSunWorld, matTemp;
         D3DXMatrixRotationAxis(&matSunWorld, &D3DXVECTOR3( 1.0f, 0.0f, 0.0f ),
                                m_fSunRot[0] );
-        D3DXMatrixRotationAxis(&matTemp, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ), 
+        D3DXMatrixRotationAxis(&matTemp, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ),
                                m_fSunRot[1] );
         D3DXMatrixMultiply(&matSunWorld,&matSunWorld,&matTemp);
-        D3DXMatrixRotationAxis(&matTemp, &D3DXVECTOR3( 0.0f, 0.0f, 1.0f ), 
+        D3DXMatrixRotationAxis(&matTemp, &D3DXVECTOR3( 0.0f, 0.0f, 1.0f ),
                                m_fSunRot[2] );
         D3DXMatrixMultiply(&matSunWorld,&matSunWorld,&matTemp);
         D3DXMatrixTranslation(&matTemp,0.0f,0.0f,fViewDist);
         D3DXMatrixMultiply(&matSunWorld,&matSunWorld,&matTemp);
 
-        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD, 
+        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD,
                                  (D3DMATRIX *)matSunWorld );
 
         D3DXMATRIX matSunView;
         D3DXMatrixIdentity(&matSunView);
-        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_VIEW, 
+        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_VIEW,
                                  (D3DMATRIX *)matSunView );
-        
+
         m_Sun.pSphere->Draw();
 
         m_pViewStack->LoadIdentity();
         m_fViewRot[0]-=(float)(0.075*m_dElapsedTime);
         m_fViewRot[1]+=(float)(0.01*m_dElapsedTime);
         m_fViewRot[2]+=(float)(0.015*m_dElapsedTime);
-        
-        m_pViewStack->RotateAxis( &D3DXVECTOR3( 1.0f, 0.0f, 0.0f ), 
+
+        m_pViewStack->RotateAxis( &D3DXVECTOR3( 1.0f, 0.0f, 0.0f ),
                                   m_fViewRot[0] );
-        m_pViewStack->RotateAxis( &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ), 
+        m_pViewStack->RotateAxis( &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ),
                                   m_fViewRot[1] );
-        m_pViewStack->RotateAxis( &D3DXVECTOR3( 0.0f, 0.0f, 1.0f ), 
+        m_pViewStack->RotateAxis( &D3DXVECTOR3( 0.0f, 0.0f, 1.0f ),
                                   m_fViewRot[2] );
         m_pViewStack->Translate(0.0f,0.0f,fViewDist);
-        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_VIEW, 
+        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_VIEW,
                                  (D3DMATRIX*)m_pViewStack->GetTop() );
-        
-    
+
+
         // Set up state for drawing the planets
-        
+
         m_pD3DDev->SetLight( 0, &m_LightFromSun );
 
         // Draw the planets
@@ -569,21 +570,21 @@ HRESULT CGravity::Draw()
         {
             m_pD3DDev->SetMaterial(&m_PlanetMaterials[m_Planets[i].dwMaterial]);
             m_pWorldStack->LoadIdentity();
-        
+
             // Do some fake gravity stuff... (a little too much gravity... :) )
             ApplyGravity(&m_Planets[i].distance,&m_Planets[i].pos, &m_Planets[i].bAttract);
-            m_pWorldStack->Translate( m_Planets[i].pos.x * m_Planets[i].distance, 
+            m_pWorldStack->Translate( m_Planets[i].pos.x * m_Planets[i].distance,
                                       m_Planets[i].pos.y * m_Planets[i].distance,
                                       m_Planets[i].pos.z * m_Planets[i].distance );
 
-            m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD, 
+            m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD,
                                      (D3DMATRIX *)m_pWorldStack->GetTop() );
-            
+
             m_Spheres[m_Planets[i].dwSphere]->Draw();
         }
 
         m_pWorldStack->LoadIdentity();
-        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD, 
+        m_pD3DDev->SetTransform( D3DTRANSFORMSTATE_WORLD,
                                  (D3DMATRIX *)m_pWorldStack->GetTop() );
 
         // Draw the particles
@@ -593,9 +594,9 @@ HRESULT CGravity::Draw()
             m_pD3DDev->SetMaterial(&m_PlanetMaterials[m_Particles[i].dwMaterial]);
 
             // Do some fake gravity stuff... (a little too much gravity... :) )
-            ApplyGravity(&m_Particles[i].distance,&m_Particles[i].pos, 
+            ApplyGravity(&m_Particles[i].distance,&m_Particles[i].pos,
                          &m_Particles[i].bAttract);
-    
+
             vParticle.dvX = m_Particles[i].pos.x* m_Particles[i].distance;
             vParticle.dvY = m_Particles[i].pos.y* m_Particles[i].distance;
             vParticle.dvZ = m_Particles[i].pos.z* m_Particles[i].distance;
@@ -609,11 +610,11 @@ HRESULT CGravity::Draw()
                                      D3DDP_WAIT );
         }
 
-     
-    
+
+
         m_pD3DDev->EndScene();
     }
-    
+
     hr = m_pD3DX->UpdateFrame( 0 );
     if ( hr == DDERR_SURFACELOST || hr == DDERR_SURFACEBUSY )
         hr = HandleModeChanges();
@@ -671,12 +672,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
     case WM_SIZE:
         if( g_pGravity
-            && g_pGravity->m_bD3DXReady 
+            && g_pGravity->m_bD3DXReady
             && !g_pGravity->m_bIsFullscreen
             )
         {
             HRESULT hr;
-            
+
             if( wParam == SIZE_MINIMIZED )
             {
                 g_pGravity->m_bActive = FALSE;
@@ -692,14 +693,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
             g_pGravity->m_bActive = TRUE;
-            
+
         }
         break;
     case WM_KEYDOWN:
         switch( wParam )
         {
         case VK_ESCAPE:
-        {    
+        {
             PostQuitMessage(0);
             break;
         }
@@ -736,11 +737,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     if ( !g_pGravity->m_bIsFullscreen )
                     {
                         RECT& r = g_pGravity->m_rWindowedRect;
-                        SetWindowPos(hwnd, HWND_NOTOPMOST, 
-                                    r.left, 
-                                    r.top, 
-                                    r.right-r.left, 
-                                    r.bottom-r.top, 
+                        SetWindowPos(hwnd, HWND_NOTOPMOST,
+                                    r.left,
+                                    r.top,
+                                    r.right-r.left,
+                                    r.bottom-r.top,
                                     SWP_NOACTIVATE );
                     }
 
@@ -765,12 +766,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 }
 
-int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
-    LPSTR lpszCmdLine, int nCmdShow) 
+int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+    LPSTR lpszCmdLine, int nCmdShow)
 {
-    HRESULT     hr;    
-    MSG         msg; 
-    WNDCLASS    wc; 
+    HRESULT     hr;
+    MSG         msg;
+    WNDCLASS    wc;
     HACCEL      hAccelApp;
     HCURSOR     hcur = NULL;
     int         ret = 0;
@@ -781,51 +782,51 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         ret = -1;
         goto Exit;
     }
-    
-    // Register the window class for the main window. 
- 
-    if (!hPrevInstance) 
-    { 
+
+    // Register the window class for the main window.
+
+    if (!hPrevInstance)
+    {
         hcur = CopyCursor(LoadCursor(NULL, IDC_ARROW));
 
-        wc.style = 0; 
-        wc.lpfnWndProc = (WNDPROC) WndProc; 
-        wc.cbClsExtra = 0; 
-        wc.cbWndExtra = 0; 
-        wc.hInstance = hInstance; 
-        wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APP_ICON)); 
-        wc.hCursor = hcur; 
-        wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH); 
-        wc.lpszMenuName =  NULL; 
-        wc.lpszClassName = NAME_OF_THE_APP; 
- 
-        if (!RegisterClass(&wc)) 
+        wc.style = 0;
+        wc.lpfnWndProc = (WNDPROC) WndProc;
+        wc.cbClsExtra = 0;
+        wc.cbWndExtra = 0;
+        wc.hInstance = hInstance;
+        wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
+        wc.hCursor = hcur;
+        wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        wc.lpszMenuName =  NULL;
+        wc.lpszClassName = NAME_OF_THE_APP;
+
+        if (!RegisterClass(&wc))
         {
             ret = -1;
             goto Exit;
         }
-    } 
-  
+    }
+
     // Create the window
 
-    g_pGravity->m_hwndMain = CreateWindow(  NAME_OF_THE_APP, 
-                                            NAME_OF_THE_APP, 
-                                            WS_OVERLAPPEDWINDOW, 
-                                            CW_USEDEFAULT, 
-                                            CW_USEDEFAULT, 
-                                            400, 
-                                            400, 
-                                            (HWND) NULL, 
-                                            (HMENU) NULL, 
-                                            hInstance, 
-                                            (LPVOID) NULL); 
- 
-    if (!g_pGravity->m_hwndMain) 
+    g_pGravity->m_hwndMain = CreateWindow(  NAME_OF_THE_APP,
+                                            NAME_OF_THE_APP,
+                                            WS_OVERLAPPEDWINDOW,
+                                            CW_USEDEFAULT,
+                                            CW_USEDEFAULT,
+                                            400,
+                                            400,
+                                            (HWND) NULL,
+                                            (HMENU) NULL,
+                                            hInstance,
+                                            (LPVOID) NULL);
+
+    if (!g_pGravity->m_hwndMain)
     {
         ret = -1;
         goto Exit;
     }
- 
+
 
     // Hide the cursor if necessary
     if( g_pGravity->m_bIsFullscreen )
@@ -834,8 +835,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
     // Show the window
-    ShowWindow(g_pGravity->m_hwndMain, nCmdShow); 
-    UpdateWindow(g_pGravity->m_hwndMain); 
+    ShowWindow(g_pGravity->m_hwndMain, nCmdShow);
+    UpdateWindow(g_pGravity->m_hwndMain);
 
     hAccelApp = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_APP_ACCELERATOR));
     if ( !hAccelApp )
@@ -858,7 +859,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     while( WM_QUIT != msg.message  )
     {
         bGotMsg = PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE );
- 
+
         if( bGotMsg )
         {
             if ( !TranslateAccelerator( g_pGravity->m_hwndMain, hAccelApp, &msg ) )
@@ -890,6 +891,6 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 Exit:
     if(hcur)
         DestroyCursor(hcur);
-    
+
     return ret;
 }

@@ -5,4 +5,4 @@ add_executable(gravity WIN32
     gravity.rc
     directx.ico
 )
-target_link_libraries(gravity PRIVATE d3dx)
+target_link_libraries(gravity PRIVATE d3dx ddraw)

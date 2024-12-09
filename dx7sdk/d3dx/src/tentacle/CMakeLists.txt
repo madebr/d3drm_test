@@ -13,4 +13,4 @@ add_executable(tentacle WIN32
     tentacle.rc
     directx.ico
 )
-target_link_libraries(tentacle PRIVATE d3dx)
+target_link_libraries(tentacle PRIVATE d3dx ddraw winmm)

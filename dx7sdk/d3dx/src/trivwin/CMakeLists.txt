@@ -5,4 +5,4 @@ add_executable(trivwin WIN32
     trivwin.rc
     directx.ico
 )
-target_link_libraries(trivwin PRIVATE d3dx)
+target_link_libraries(trivwin PRIVATE d3dx ddraw)

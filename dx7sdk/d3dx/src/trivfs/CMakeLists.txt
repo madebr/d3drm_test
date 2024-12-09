@@ -5,4 +5,4 @@ add_executable(trivfs WIN32
     trivfs.rc
     directx.ico
 )
-target_link_libraries(trivfs PRIVATE d3dx)
+target_link_libraries(trivfs PRIVATE d3dx ddraw)

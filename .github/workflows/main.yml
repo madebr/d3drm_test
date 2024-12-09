@@ -15,9 +15,8 @@ jobs:
         fail-fast: false
         matrix:
             platform:
-                - { name: 'Windows (MSVC)',     os: windows-latest, shell: sh,  vendored: true, msvc: 1, shared: 1, static: 0, artifact: 'SDL3_image-VC-x64',
-                    cmake: '-DSDLIMAGE_BACKEND_STB=OFF -DPerl_ROOT=C:/Strawberry/perl/bin/ -GNinja -DCMAKE_POLICY_DEFAULT_CMP0141=NEW -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=ProgramDatabase -DCMAKE_EXE_LINKER_FLAGS=-DEBUG -DCMAKE_SHARED_LINKER_FLAGS=-DEBUG' }
-                - { name: 'Windows (mingw32)',  os: windows-latest, shell: 'msys2 {0}', vendored: false, msystem: mingw64, msys-env: mingw-w64-x86_64 }
+                - { name: 'Windows (MSVC)',     os: windows-latest, shell: sh, msvc: true }
+                - { name: 'Windows (mingw32)',  os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686 }
 
     steps:
       - uses: actions/checkout@v4
@@ -31,12 +30,16 @@ jobs:
               ${{ matrix.platform.msys-env }}-cmake
               ${{ matrix.platform.msys-env }}-gcc
               ${{ matrix.platform.msys-env }}-ninja
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: ${{ matrix.platform.msvc }}
+        with:
+          arch: Win32
       - name: 'Install Ninja'
         uses: aseprite/get-ninja@main
         if: ${{ !contains(matrix.platform.shell, 'msys2') }}
       - name: 'CMake (Configure)'
         run: |
-          cmake -B build -GNinja
+          cmake -B build -GNinja ${{ matrix.platform.cmake }}
       - name: 'CMake (Build)'
         run: |
-          cmake --build build
+          cmake --build build -- -k0

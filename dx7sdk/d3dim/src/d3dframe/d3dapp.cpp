@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 #define STRICT
 #include <windows.h>
-#include <pbt.h>
 #include <mmsystem.h>
 #include <stdio.h>
 #include <tchar.h>

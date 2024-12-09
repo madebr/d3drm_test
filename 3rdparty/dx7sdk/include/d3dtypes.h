@@ -7,7 +7,7 @@
  *
  ***************************************************************************/
 
-#ifndef _D3DTYPES_H_
+#if !defined(_D3DTYPES_H_) && !defined(_d3d9TYPES_H_)
 #define _D3DTYPES_H_
 
 #include <windows.h>

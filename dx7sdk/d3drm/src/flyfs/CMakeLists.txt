@@ -1,4 +1,4 @@
-add_executable(flyfs
+add_executable(flyfs WIN32
     fly.cpp
     d3dapp.c
     d3dapp.h

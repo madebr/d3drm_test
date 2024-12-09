@@ -6,4 +6,4 @@ add_executable(envmap WIN32
     envmap.rc
     directx.ico
 )
-target_link_libraries(envmap PRIVATE d3dx d3dxd d3dxof)
+target_link_libraries(envmap PRIVATE d3dx d3dxd d3dxof ddraw)

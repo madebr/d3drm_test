@@ -1,4 +1,4 @@
-add_executable(fly
+add_executable(fly WIN32
     fly.cpp
     rmmain.cpp
     resource.h
